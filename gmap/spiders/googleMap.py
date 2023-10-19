@@ -1,16 +1,34 @@
 import scrapy
-from pyppeteer import launch
-import asyncio
-
+from time import sleep
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from scrapy.selector import Selector
+from selenium import webdriver
 
 class GooglemapSpider(scrapy.Spider):
     name = 'googleMap'
     allowed_domains = ['www.google.com']
-    start_urls = ['https://www.google.com/maps/?hl=ja']
+    # start_urls = ['https://www.google.com/maps/?hl=ja']
+    url = 'https://www.google.com/maps/?hl=ja'
+
+    driver = webdriver.Chrome()
+
+    def start_requests(self):
+        self.driver.get(self.url)
+        self.driver.find_element(By.XPATH, '//*[@id="searchboxinput"]').send_keys('浦安 焼肉')
+        self.driver.find_element(By.XPATH, '//*[@id="searchbox-searchbutton"]').send_keys(Keys.ENTER)
+        sleep(1)
+        elements = self.driver.find_element(By.XPATH, '//div[contains(@aria-label, "の検索結果")]')
+        self.driver.save_screenshot('xxx.png')
 
     def parse(self, response):
-        # この部分では、Pyppeteerを使ってページを非同期に開きます。
-        asyncio.get_event_loop().run_until_complete(self.parse_page(response.url))
+        driver = response.meta['driver']
+        driver.find_element(By.XPATH, '//*[@id="searchboxinput"]').send_keys('浦安 焼肉')
+        driver.find_element(By.XPATH, '//*[@id="searchbox-searchbutton"]').send_keys(Keys.ENTER)
+        sleep(1)
+        driver.save_screenshot('xxx.png')
+        sleep(1)
+
 
     async def parse_page(self, url):
         # ブラウザと新しいページを開始
