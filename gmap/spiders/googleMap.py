@@ -26,9 +26,35 @@ class GooglemapSpider(scrapy.Spider):
         driver.find_element(By.XPATH, '//*[@id="searchboxinput"]').send_keys('浦安 焼肉')
         driver.find_element(By.XPATH, '//*[@id="searchbox-searchbutton"]').send_keys(Keys.ENTER)
         sleep(1)
-        driver.save_screenshot('xxx.png')
-        sleep(1)
 
+        elements = WebDriverWait(driver, 10).until(
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, '[aria-label*="の検索結果"]'))
+        )
+
+        if elements:
+            # 最初の要素にスクロールします。
+            driver.execute_script("arguments[0].scrollIntoView();", elements[0])
+
+            while True:
+                try:
+                    # 'span.HlvSq' セレクタを持つ要素を検索します。
+                    target_element = driver.find_element(By.CSS_SELECTOR, 'span.HlvSq')
+
+                    if target_element:
+                        content = target_element.text
+                        if 'リストの最後に到達しました。' in content:
+                            print("Target element found!")
+                            break
+
+                except Exception as e:
+                    print(e)  # エラーの詳細を出力またはログに記録します。
+
+                # ページの下部に移動します。
+                driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.PAGE_DOWN)
+
+                # 要素がロードされるまで待ちます。
+                time.sleep(1)  # 必要に応じて、待機時間を調整してください。
+        driver.save_screenshot('xxx.png')
 
     async def parse_page(self, url):
         # ブラウザと新しいページを開始
