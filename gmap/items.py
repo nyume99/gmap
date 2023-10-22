@@ -7,6 +7,10 @@ import scrapy
 
 
 class GmapItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    名前 = scrapy.Field()
+    電話番号 = scrapy.Field()
+    住所 = scrapy.Field()
+    カテゴリ = scrapy.Field()
+    口コミ評価 = scrapy.Field()
+    口コミ数 = scrapy.Field()
+    URL = scrapy.Field()

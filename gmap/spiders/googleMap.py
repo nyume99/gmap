@@ -4,109 +4,86 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from scrapy.selector import Selector
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
+
+from gmap.items import GmapItem
+
 
 class GooglemapSpider(scrapy.Spider):
     name = 'googleMap'
     allowed_domains = ['www.google.com']
-    # start_urls = ['https://www.google.com/maps/?hl=ja']
+    start_urls = ['https://www.google.com/maps/?hl=ja']
     url = 'https://www.google.com/maps/?hl=ja'
 
     driver = webdriver.Chrome()
 
-    def start_requests(self):
-        self.driver.get(self.url)
-        self.driver.find_element(By.XPATH, '//*[@id="searchboxinput"]').send_keys('浦安 焼肉')
-        self.driver.find_element(By.XPATH, '//*[@id="searchbox-searchbutton"]').send_keys(Keys.ENTER)
-        sleep(1)
-        elements = self.driver.find_element(By.XPATH, '//div[contains(@aria-label, "の検索結果")]')
-        self.driver.save_screenshot('xxx.png')
-
+    # def start_requests(self):
     def parse(self, response):
-        driver = response.meta['driver']
-        driver.find_element(By.XPATH, '//*[@id="searchboxinput"]').send_keys('浦安 焼肉')
-        driver.find_element(By.XPATH, '//*[@id="searchbox-searchbutton"]').send_keys(Keys.ENTER)
-        sleep(1)
 
-        elements = WebDriverWait(driver, 10).until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, '[aria-label*="の検索結果"]'))
+        self.driver.get(self.url)
+        self.driver.find_element(By.XPATH, '//*[@id="searchboxinput"]').send_keys('浦安　焼肉')
+        self.driver.find_element(By.XPATH, '//*[@id="searchbox-searchbutton"]').send_keys(Keys.ENTER)
+        elements = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_all_elements_located((By.XPATH, '//*[contains(@aria-label, "の検索結果")]'))
         )
 
         if elements:
             # 最初の要素にスクロールします。
-            driver.execute_script("arguments[0].scrollIntoView();", elements[0])
+            self.driver.execute_script("arguments[0].scrollIntoView();", elements[0])
 
+            count = 0
             while True:
                 try:
-                    # 'span.HlvSq' セレクタを持つ要素を検索します。
-                    target_element = driver.find_element(By.CSS_SELECTOR, 'span.HlvSq')
+                    end_element = self.driver.find_element(By.CSS_SELECTOR, 'span.HlvSq')
 
-                    if target_element:
-                        content = target_element.text
-                        if 'リストの最後に到達しました。' in content:
-                            print("Target element found!")
-                            break
+                    if end_element:
+                        print(end_element.text)
+                        break
 
                 except Exception as e:
-                    print(e)  # エラーの詳細を出力またはログに記録します。
+                    print(e)
 
                 # ページの下部に移動します。
-                driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.PAGE_DOWN)
+                elements[0].send_keys(Keys.PAGE_DOWN)
+                count += 1
 
                 # 要素がロードされるまで待ちます。
                 time.sleep(1)  # 必要に応じて、待機時間を調整してください。
-        driver.save_screenshot('xxx.png')
+        # self.driver.save_screenshot('xxx.png')
+        print(count)
 
-    async def parse_page(self, url):
-        # ブラウザと新しいページを開始
-        browser = await launch(headless=False)  # ブラウザをヘッドレスモード（GUIなし）で起動するかどうか。
-        page = await browser.newPage()
+        target_elements = self.driver.find_elements(By.XPATH, '//a[contains(@class, "hfpxzc")]')
 
-        # Google MapsのURLに移動
-        await page.goto(url)
+        gmap_urls = []
 
-        await page.type('#searchboxinput', '浦安 焼肉')
-        await page.click('#searchbox-searchbutton')
-        await page.waitForNavigation()
-
-        elements = await page.querySelectorAll('[aria-label*="の検索結果"]')
-
-        if elements:  # 要素が存在するか確認
-            # 最初の要素にフォーカスを当てます（他の要素にフォーカスを当てる場合、リストから選択してください）
-            await elements[0].focus()
-
-            while True:
-                target_element = await page.querySelector('span.HlvSq')
-
-                if target_element:
-                    content = await page.evaluate('(element) => element.textContent', target_element)
-                    if 'リストの最後に到達しました。' in content:
-                        print("Target element found!")
-                        break  # ターゲットが見つかったので終了ったのでループを抜ける
-
-                # ターゲットがまだ見つからない場合、Endキーを送信してページの下部に移動
-                await page.keyboard.press("PageDown")
-
-                # キー送信後、要素がロードされるまで少し待機（ページや環境によって調整が必要）
-                await asyncio.sleep(1)
-
-
-        await page.screenshot({'path': 'screenshot.png'})
-        # 必要な操作やデータの抽出をここで行います。
-        # 例えば、特定の場所を検索したり、スクリーンショットを撮ったりすることができます。
-
-        target_selector = 'a.hfpxzc'
-
-        # セレクタに一致する要素を取得します。
-        target_elements = await page.querySelectorAll(target_selector)
-
-        urls = []
         for element in target_elements:
-            # 'href'属性の値を取得
-            href_value = await page.evaluate('(element) => element.getAttribute("href")', element)
-            urls.append(href_value)
+            href = element.get_attribute("href")
+            gmap_urls.append(href)
 
-        # 作業が終了したらブラウザを閉じます。
-        await browser.close()
+        for gmap_url in gmap_urls:
+            self.driver.get(gmap_url)
+            response = Selector(text=self.driver.page_source)
 
-        print(urls)
-        print(len(urls))
+            detail_elements = response.xpath('//div[@class="AeaXub"]')
+            for detail in detail_elements:
+                img_src = detail.xpath('.//img[@class="Liguzb"]/@src').get()
+
+                if 'phone' in img_src:
+                    phone = detail.xpath('.//div[@class="Io6YTe fontBodyMedium kR99db "]/text()').get()
+                elif 'place' in img_src:
+                    place = detail.xpath('.//div[@class="Io6YTe fontBodyMedium kR99db "]/text()').get()
+                elif 'public' in img_src:
+                    url = detail.xpath('.//div[@class="Io6YTe fontBodyMedium kR99db "]/text()').get()
+
+            yield GmapItem(
+                名前=response.xpath('//h1/text()').get(),
+                電話番号=phone,
+                住所=place,
+                カテゴリ=response.xpath('//button[@jsaction="pane.rating.category"]/text()').get(),
+                口コミ評価=response.xpath('//div[@class="F7nice "]/span/span/text()').get(),
+                口コミ数=response.xpath('//span[contains(@aria-label, "件のクチコミ")]/text()').get(),
+                URL=url
+            )
+
