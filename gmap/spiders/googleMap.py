@@ -7,6 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+from selenium.webdriver.chrome.options import Options
 
 from gmap.items import GmapItem
 
@@ -16,6 +17,12 @@ class GooglemapSpider(scrapy.Spider):
     allowed_domains = ['www.google.com']
     start_urls = ['https://www.google.com/maps/?hl=ja']
     url = 'https://www.google.com/maps/?hl=ja'
+
+    options = Options()
+    options.add_argument('--headless=new')
+    options.add_argument('--window-size=1280,1024')
+
+    driver = webdriver.Chrome(options=options)
 
     driver = webdriver.Chrome()
 
