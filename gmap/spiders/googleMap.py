@@ -44,7 +44,7 @@ class GooglemapSpider(scrapy.Spider):
                     end_element = self.driver.find_element(By.CSS_SELECTOR, 'span.HlvSq')
 
                     if end_element:
-                        print(end_element.text)
+                        #print(end_element.text)
                         break
 
                 except Exception as e:
