@@ -20,7 +20,7 @@ class GooglemapSpider(scrapy.Spider):
 
     options = Options()
     options.add_argument('--headless=new')
-    options.add_argument('--window-size=1280,1024')
+    options.add_argument("--no-sandbox")
 
     driver = webdriver.Chrome(options=options)
 
