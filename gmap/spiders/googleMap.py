@@ -20,7 +20,8 @@ class GooglemapSpider(scrapy.Spider):
 
     options = Options()
     options.add_argument('--headless=new')
-    options.add_argument("--no-sandbox")
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-gpu')
 
     driver = webdriver.Chrome(options=options)
 
@@ -36,7 +37,7 @@ class GooglemapSpider(scrapy.Spider):
 
         if elements:
             # 最初の要素にスクロールします。
-            self.driver.execute_script("arguments[0].scrollIntoView();", elements[0])
+            self.driver.execute_script('arguments[0].scrollIntoView();', elements[0])
 
             count = 0
             while True:
