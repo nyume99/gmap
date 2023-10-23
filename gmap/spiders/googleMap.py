@@ -24,8 +24,6 @@ class GooglemapSpider(scrapy.Spider):
 
     driver = webdriver.Chrome(options=options)
 
-    driver = webdriver.Chrome()
-
     # def start_requests(self):
     def parse(self, response):
 
