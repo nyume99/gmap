@@ -8,6 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import TimeoutException
 
 from gmap.items import GmapItem
 
@@ -21,15 +22,20 @@ class GooglemapSpider(scrapy.Spider):
     options = Options()
     options.add_argument('--headless=new')
     options.add_argument('--no-sandbox')
-    options.add_argument('--disable-gpu')
+    #options.add_argument('--disable-gpu')
 
     driver = webdriver.Chrome(options=options)
+
+    def __init__(self, arg1=None, arg2=None, *args, **kwargs):
+        super(GooglemapSpider, self).__init__(*args, **kwargs)
+        self.arg1 = arg1
+        self.arg2 = arg2
 
     # def start_requests(self):
     def parse(self, response):
 
         self.driver.get(self.url)
-        self.driver.find_element(By.XPATH, '//*[@id="searchboxinput"]').send_keys('浦安　焼肉')
+        self.driver.find_element(By.XPATH, '//*[@id="searchboxinput"]').send_keys(self.arg1 + ' ' + self.arg2)
         self.driver.find_element(By.XPATH, '//*[@id="searchbox-searchbutton"]').send_keys(Keys.ENTER)
         elements = WebDriverWait(self.driver, 10).until(
             EC.presence_of_all_elements_located((By.XPATH, '//*[contains(@aria-label, "の検索結果")]'))
@@ -49,7 +55,7 @@ class GooglemapSpider(scrapy.Spider):
                         break
 
                 except Exception as e:
-                    print(e)
+                    pass
 
                 # ページの下部に移動します。
                 elements[0].send_keys(Keys.PAGE_DOWN)
@@ -57,7 +63,9 @@ class GooglemapSpider(scrapy.Spider):
 
                 # 要素がロードされるまで待ちます。
                 time.sleep(1)  # 必要に応じて、待機時間を調整してください。
+
         # self.driver.save_screenshot('xxx.png')
+
         print(count)
 
         target_elements = self.driver.find_elements(By.XPATH, '//a[contains(@class, "hfpxzc")]')
@@ -93,3 +101,20 @@ class GooglemapSpider(scrapy.Spider):
                 URL=url
             )
 
+
+# デプロイで発行されたURL
+#json_file = 'https://script.google.com/macros/s/AKfycbwm20_bxQ305UGExZiuUbvYdTh_5wxGbOoO-Ck8V8lzM5-WtGJIl6rcDRdn5Kh6MyGu/exec'
+
+#scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+
+# URLの情報を辞書型へ変換
+#key = json.loads(requests.get(json_file).text)
+
+# credentialsを読み込む
+#credentials = ServiceAccountCredentials.from_json_keyfile_dict(key, scope)
+
+#gc = gspread.authorize(credentials)
+
+#workbook = gc.open_by_key(ss_id)
+#worksheet = workbook.worksheet(sht_name)
+#  worksheet.append_rows(reserve_list)

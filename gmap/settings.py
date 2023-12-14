@@ -13,6 +13,7 @@ BOT_NAME = 'gmap'
 SPIDER_MODULES = ['gmap.spiders']
 NEWSPIDER_MODULE = 'gmap.spiders'
 
+LOG_LEVEL = 'ERROR'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'gmap (+http://www.yourdomain.com)'
@@ -63,9 +64,9 @@ ROBOTSTXT_OBEY = False
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'gmap.pipelines.GmapPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'gmap.pipelines.GmapPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

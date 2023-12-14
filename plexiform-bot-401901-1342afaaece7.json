@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "plexiform-bot-401901",
+  "private_key_id": "1342afaaece75e7ba8ed71dcde93ad4e0b655fbe",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDGFDtCcmMRKnMC\ntca+RVqrPcVoX9fs63OiAduCNRcqoz9mNf1j9Dnnhy3zZyC6nminJfGzy0fTdfDX\n86KyOSuGhOUASKWgaQvUFJKvocCCtihXUCKf/cyp6dPNOjKjSIp7g7zQG7kVe/Lv\nK5SYn08/MGL2peeC/S33AJ2bw6XHwe4nGUWRpLbwuzweUoeh7oNQfC7qxO+CSkD5\n5rxFE6lOoDpQCPZfeF8HxXlcm3At3q5x9LcZqh1JjNNIuz84flR0TV3pIVd/oM2p\n6DVeS2P5p/wjrbeSNw5g2nyArKZ+ja+LnxXYr0tlwMvWizGwTZE8l5bdSInXbswj\nbd28M8DNAgMBAAECggEAEGbtefTvN3qB4o1l2IH1XkJeXeRjL2xXJhOsTG2+ri+t\nbiEgteMBMScJoDhVG/mbuzeST6vmFeBpd0sRQ7El5bI3JPJfEKznfKzQHA4IsGo1\nZfbYnydM3XG43FYqNPN/+swFBGCUpMRKRhF1m7vEEVHy5+9YqolHgfFsRlE0TERL\n8Xuawsj46XrPoJ7PNQOZN2mGoSnPzhZpeAYahR8rN0aQ2f+hL20MYptrPWOqf1eh\noyB26GfEjjUvLFeVfGQs8C9scbB8WRpYelhg3erQqni4hmdLl4h30PppoakdNREd\ngsMxBFQDvv43VUOHcqB0osQepM1znp78DXCXZGSSywKBgQDr67mYZfQ+z9/key9b\nvc2PxXIsAdwFFk1Xrad9+O8QOChLJmQxQ7aWBMqAU/2sVFJsVhlHTZP0yc+vs7Ml\nF/AdH7ikCLwTdFO1W6/B54sJMY9+/RCBAy5YHA+uBBeHM5hrOzttlD8lMcm14bnr\nMKQmCN9CHh8ClS70v/10JARDmwKBgQDW8AE3fLKtVXnCitilcNDNKNZKxNlNjYKE\nsFAzMXs3HLCdTHtV5TzQPMzUP22JNp87CVI9glLC+dm9Qz7AkgXGuiakTCRanr83\n5QQKKOhIWtswDnJJMTpKQMGIK/3YO97/XlvSPhV+tQA2zi5yoywBO7AmmXdsKY6o\nxPRjCcWXtwKBgCQoEF2m4nPt7+ZYar2orSRnokPUVSACdwAFATJxQFJACQzbaWeT\ndRwwx8g7FxmeIrOvzlf7L73IYCgRZlc8//O2tNmO7SQeI+YbkygokEpsag2QQ0NC\ndYvTYSPORLzXz3g/r6/vlG3i34McgR3maoHZwj2j2CTRME0aT4HJM04ZAoGAZW+V\nE2utI3JwaSh/v+wzDm+UWmr2Jsx+6UIQR2i1vreyfjnHBy2NerUG8bARcK0vjnwC\nrPahOlURtmlS5yzCvxvA+s7YZU//7FAPjP/rR6JhSRe4ReSOntZav3oLbY4r2pbc\nfKdCG68uL680anOpY9eYdU799jTSl8GDmG3XK5cCgYEAixv1ILug8iHnYVyfP6ro\njoMFwLp53alaIDQKkz98DNge1Agf0aVSwY/cWkRshSw2nbukiWFRxhED2hqf8+c1\nO1UJMXPVOPdroG+v07qCJNJ+zQKniJmSycHN8k5RqsSuc/pn/RHhXPPeHS/HfRbB\nRON04ISrJ7rR2YtohxwUjhQ=\n-----END PRIVATE KEY-----\n",
+  "client_email": "gmaptosheet@plexiform-bot-401901.iam.gserviceaccount.com",
+  "client_id": "101687161369167758239",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/gmaptosheet%40plexiform-bot-401901.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
