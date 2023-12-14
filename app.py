@@ -8,6 +8,8 @@ app = Flask(__name__)
 def run_spider():
     data = request.json
 
+    print(data)
+
     # スパイダーをバックグラウンドで実行し、パラメータを渡す
     subprocess.Popen(['scrapy', 'crawl', data.spider, '-a', f'arg1={data.keys}'])
     return "Spider started"
