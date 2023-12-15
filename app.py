@@ -1,18 +1,21 @@
 from flask import Flask, request
 import subprocess
+import json
 
 app = Flask(__name__)
 
 
 @app.route('/run_spider', methods=['POST'])
 def run_spider():
-    data = request.json
+    data = request.get_json()
+    spider = data['spider']
+    array = data['keys']
 
-    print(data.keys)
-    print(data.spider)
+
+    #print(request.spider)
 
     # スパイダーをバックグラウンドで実行し、パラメータを渡す
-    subprocess.Popen(['scrapy', 'crawl', data.spider, '-a', f'arg1={data.keys}'])
+    subprocess.Popen(['scrapy', 'crawl', spider, '-a', f'array={json.dumps(array)}'])
     return "Spider started"
 
 
