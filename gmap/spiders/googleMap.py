@@ -1,5 +1,6 @@
 import scrapy
 import json
+import os
 from time import sleep
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -36,7 +37,7 @@ class GooglemapSpider(scrapy.Spider):
 
     # def start_requests(self):
     def parse(self, response):
-
+        FILENAME = os.path.join(os.path.dirname(os.path.abspath(__file__)), "screen.png")
         print(self.array)
         key1 = self.array[0][0]
 
@@ -46,6 +47,8 @@ class GooglemapSpider(scrapy.Spider):
 
             self.driver.find_element(By.XPATH, '//*[@id="searchboxinput"]').send_keys(key1 + ' ' + kw[1])
             self.driver.find_element(By.XPATH, '//*[@id="searchbox-searchbutton"]').send_keys(Keys.ENTER)
+            self.driver.save_screenshot(FILENAME)
+
             elements = WebDriverWait(self.driver, 20).until(
                 EC.presence_of_all_elements_located((By.XPATH, '//*[contains(@aria-label, "の検索結果")]'))
             )
